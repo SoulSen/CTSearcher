@@ -14,7 +14,7 @@ class CTSearch(commands.Bot):
         self._username = os.environ['USERNAME']
         self._password = os.environ['PASSWORD']
 
-        self.BASE = 'https://api.github.com/repos/ChatTriggers/ct.js/contents/'
+        self.BASE = 'https://api.github.com/repos/ChatTriggers/ct.js/contents'
         self.IGNORED = ['com/chattriggers/ctjs/engine/langs', 'com/chattriggers/ctjs/engine/loader', 
                         'com/chattriggers/ctjs/engine/module', 'com/chattriggers/ctjs/utils',
                         'com/chattriggers/ctjs/listeners', 'com/chattriggers/ctjs/minecraft/imixins',
@@ -31,8 +31,7 @@ class CTSearch(commands.Bot):
         print('READY')
 
     async def _prepare_cache(self):
-        async with self.session.get('https://api.github.com/repos/ChatTriggers/ct.js/contents/src/main/kotlin/com'
-                                    '/chattriggers/ctjs',
+        async with self.session.get(f'{self.BASE}/src/main/kotlin/com/chattriggers/ctjs',
                                     auth=aiohttp.BasicAuth(self._username,
                                                            self._password)
                                     ) as response:
@@ -49,7 +48,7 @@ class CTSearch(commands.Bot):
 
             elif file_or_dir['type'] == 'dir':
                 if not any(pkg in file_or_dir['path'] for pkg in self.IGNORED):
-                    async with await self.session.get(self.BASE + '/' + file_or_dir['path'], 
+                    async with await self.session.get(f'{self.BASE}/{file_or_dir['path']}', 
                                                       auth=aiohttp.BasicAuth(self._username,
                                                                              self._password)
                                                       ) as response:
