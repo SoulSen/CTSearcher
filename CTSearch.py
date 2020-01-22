@@ -24,7 +24,7 @@ class CTSearch(commands.Bot):
 
     async def on_ready(self):
         self.session = aiohttp.ClientSession()
-        self.change_presence(status=discord.Game("*help for help"))
+        self.change_presence(status=discord.Game("Reading Documentation | *help"))
         await self._prepare_cache()
 
         print('READY')
@@ -65,13 +65,14 @@ bot = CTSearch(command_prefix="*")
              help="Searches through the available objects from ChatTriggers "
                   "and returns links to the JavaDocs")
 async def javadocs(ctx, query: str = None):
-    e = discord.Embed(title=f'Results for: {query}', colour=discord.Colour.blurple())
+    e = discord.Embed(colour=discord.Colour.blurple())
     e.set_author(name=f'Query made by: {ctx.author}', icon_url=ctx.author.avatar_url)
 
     if not query:
         e.description = '[JavaDocs](https://www.chattriggers.com/javadocs/)'
         return await ctx.send(embed=e)
-
+    
+    e.title = f'Results for: {query}'
     results = 0
     description = ''
 
