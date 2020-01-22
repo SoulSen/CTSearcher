@@ -48,7 +48,7 @@ class CTSearch(commands.Bot):
 
             elif file_or_dir['type'] == 'dir':
                 if not any(pkg in file_or_dir['path'] for pkg in self.IGNORED):
-                    async with await self.session.get(f'{self.BASE}/{file_or_dir['path']}', 
+                    async with await self.session.get(f'{self.BASE}/{file_or_dir["path"]}', 
                                                       auth=aiohttp.BasicAuth(self._username,
                                                                              self._password)
                                                       ) as response:
