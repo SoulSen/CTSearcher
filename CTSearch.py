@@ -24,7 +24,8 @@ class CTSearch(commands.Bot):
 
     async def on_ready(self):
         self.session = aiohttp.ClientSession()
-        await self.change_presence(status=discord.Game("Reading Documentation | *help"))
+        await self.change_presence(activity=discord.Activity(name="Reading Documentation | *help",
+                                                             type=discord.ActivityType.playing))
         await self._prepare_cache()
 
         print('READY')
