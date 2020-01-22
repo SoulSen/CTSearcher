@@ -75,13 +75,14 @@ async def javadocs(ctx, query: str = None):
     e.title = f'Results for: {query}'
     results = 0
     description = ''
-
+    query = query.lower()
+    
     for _class in bot._cache:
         if results > 5:
             break
 
         else:
-            if query in _class:
+            if query in _class.lower():
                 results += 1
 
                 url = 'https://www.chattriggers.com/javadocs/' + _class.replace('.kt', '.html')
