@@ -93,4 +93,4 @@ async def javadocs(ctx, query: str = None):
         await ctx.send(embed=e)
 
 
-bot.run('NTUxMjA2MTI1MDYwNzUxMzYw.Xie6rg.BKlLfmbibM6fFfZMe0myS-7ONeE')
+bot.run(os.environ['TOKEN'])
