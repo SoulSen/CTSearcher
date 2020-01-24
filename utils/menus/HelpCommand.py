@@ -10,7 +10,7 @@ class HelpCommand(commands.HelpCommand):
                f"{command.brief}\n "
 
     async def send_bot_help(self, mapping):
-        e = discord.Embed(title='Command Help')
+        e = discord.Embed(title='Command Help', colour=discord.Color.from_rgb(123, 47, 181))
         e.set_author(name=self.context.author, icon_url=self.context.author.avatar_url)
 
         # Separate Page
