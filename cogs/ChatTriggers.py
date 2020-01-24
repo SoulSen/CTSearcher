@@ -13,7 +13,12 @@ class ChatTriggers(commands.Cog):
         bot.help_command.show_hidden = True
 
         bot.help_command.cog = self
-
+        
+        self.check_for_new_module.start()
+        
+    def cog_unload(self):
+        self.check_for_new_module.cancel()
+        
     @tasks.loop(minutes=15.0)
     async def check_for_new_module(self):
         async with self.bot.session.get('https://chattriggers.com/api/modules',
