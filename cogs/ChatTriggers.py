@@ -10,8 +10,6 @@ class ChatTriggers(commands.Cog):
         self.bot = bot
 
         bot.help_command = HelpCommand()
-        bot.help_command.show_hidden = True
-
         bot.help_command.cog = self
         
         self.check_for_new_module.start()
