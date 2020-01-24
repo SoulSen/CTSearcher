@@ -11,7 +11,7 @@ class HelpCommand(commands.HelpCommand):
 
     async def send_bot_help(self, mapping):
         e = discord.Embed(title='Command Help', 
-                          colour=discord.Color.from_rgb(123, 47, 181))
+                          color=discord.Color.from_rgb(123, 47, 181))
         e.set_author(name=self.context.author, 
                      icon_url=self.context.author.avatar_url)
         # e.set_footer(text=f'Current Prefix: {self.context.prefix}')
