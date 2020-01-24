@@ -47,7 +47,9 @@ class HelpCommand(commands.HelpCommand):
 
             for _command in _commands:
                 command_string += self.get_command_signature(_command) + '\n'
-
+            
+            # Remove last `\n`
+            command_string = command_string[:-2]
             command_string += '```'
 
             if cog:
