@@ -45,7 +45,7 @@ class CTSearch(commands.Bot):
         print('READY')
     
     async def on_message(self, message):
-        if message.channel.id == 435654238216126485 and message.content == 'bot':
+        if message.channel.id == 435654238216126485 and message.content == 'bot' and message.author.id == 110613985954365440:
             await message.channel.send('land')
             
         await self.process_commands(message)
