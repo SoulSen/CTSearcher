@@ -71,7 +71,7 @@ class ChatTriggers(commands.Cog):
     async def javadocs(self, ctx, query: str = None):
         e = discord.Embed(colour=discord.Color.blurple())
         e.set_author(name=f'Query made by: {ctx.author}',
-                     icon_url=ctx.author.avatar_url,)
+                     icon_url=ctx.author.avatar_url)
 
         if not query:
             e.description = '[JavaDocs](https://www.chattriggers.com/javadocs/)'
