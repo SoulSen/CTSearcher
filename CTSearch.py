@@ -76,7 +76,7 @@ class CTSearch(commands.Bot):
                     ).decode('utf-8')
 
                 # REGEX: (.*)fun\s(.*?\)) TO INCLUDE PARAMETERS, THIS DOES NOT CAPTURE EACH INDIVIDUAL PARAM!
-                matches = re.findall(r'(.*)fun\s(.*)\(', content)
+                matches = re.findall(r'(.*)fun\s(.*?)\(', content)
 
                 for func_type, func_name in matches:
                     if 'private' or 'internal' not in func_type.lower():
