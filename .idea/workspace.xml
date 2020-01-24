@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d434e02-d75a-4dd4-8a25-99d1d0116458" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/CTJSRTFM.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CTSearch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CTSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/CTSearch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,10 +34,33 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\taluk\Documents\Coding Projects\Python\CTJSRTFM\utils\parser" />
+      <recent name="C:\Users\taluk\Documents\Coding Projects\Python\CTJSRTFM\antlr" />
       <recent name="C:\Users\taluk\Documents\Coding Projects\Python\CTJSRTFM" />
     </key>
   </component>
   <component name="RunManager">
+    <configuration name="CTSearch" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="CTJSRTFM" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CTSearch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="CTSearch" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CTJSRTFM" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -63,8 +82,31 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="CTSearch" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="CTJSRTFM" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/CTSearch.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.CTSearch" />
+        <item itemvalue="Python.CTSearch" />
         <item itemvalue="Python.CTSearch" />
       </list>
     </recent_temporary>
@@ -94,26 +136,48 @@
     </task>
     <servers />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
   <component name="WindowStateProjectService">
+    <state x="414" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1579821124047">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="414" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579821124047" />
     <state x="725" y="316" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1579669209399">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="725" y="316" key="#com.intellij.fileTypes.FileTypeChooser/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579669209399" />
-    <state width="1899" height="345" key="GridCell.Tab.0.bottom" timestamp="1579668200096">
+    <state width="1899" height="331" key="GridCell.Tab.0.bottom" timestamp="1579826220135">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1899" height="345" key="GridCell.Tab.0.bottom/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579668200096" />
-    <state width="1899" height="345" key="GridCell.Tab.0.center" timestamp="1579668200095">
+    <state width="1899" height="331" key="GridCell.Tab.0.bottom/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579826220135" />
+    <state width="1899" height="331" key="GridCell.Tab.0.center" timestamp="1579826220135">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1899" height="345" key="GridCell.Tab.0.center/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579668200095" />
-    <state width="1899" height="345" key="GridCell.Tab.0.left" timestamp="1579668200095">
+    <state width="1899" height="331" key="GridCell.Tab.0.center/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579826220135" />
+    <state width="1899" height="331" key="GridCell.Tab.0.left" timestamp="1579826220135">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1899" height="345" key="GridCell.Tab.0.left/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579668200095" />
-    <state width="1899" height="345" key="GridCell.Tab.0.right" timestamp="1579668200095">
+    <state width="1899" height="331" key="GridCell.Tab.0.left/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579826220135" />
+    <state width="1899" height="331" key="GridCell.Tab.0.right" timestamp="1579826220135">
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
-    <state width="1899" height="345" key="GridCell.Tab.0.right/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579668200095" />
+    <state width="1899" height="331" key="GridCell.Tab.0.right/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579826220135" />
+    <state x="713" y="152" key="RollbackChangesDialog" timestamp="1579678231771">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="713" y="152" key="RollbackChangesDialog/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579678231771" />
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup" timestamp="1579822409664">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="623" y="227" width="672" height="678" key="search.everywhere.popup/1920.-69.1366.738/0.0.1920.1050@0.0.1920.1050" timestamp="1579822409664" />
   </component>
 </project>
