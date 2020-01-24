@@ -48,7 +48,7 @@ class CTSearch(commands.Bot):
         if message.channel.id == 119493402902528000 and message.content == 'bot':
             await message.channel.send('land')
             
-        await bot.process_commands(message)
+        await self.process_commands(message)
 
     async def _prepare_cache(self):
         # We get the initial contents of the root folder
