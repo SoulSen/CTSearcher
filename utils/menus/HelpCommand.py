@@ -14,7 +14,7 @@ class HelpCommand(commands.HelpCommand):
                           colour=discord.Color.from_rgb(123, 47, 181))
         e.set_author(name=self.context.author, 
                      icon_url=self.context.author.avatar_url)
-        e.set_footer(text=f'Current Prefix: {self.context.prefix}')
+        # e.set_footer(text=f'Current Prefix: {self.context.prefix}')
 
         # Separate Page
         e_command = e.copy()
