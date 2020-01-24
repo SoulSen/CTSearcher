@@ -7,11 +7,13 @@ class HelpCommand(commands.HelpCommand):
     # How commands should be viewed
     def get_command_signature(self, command):
         return f"{command.name} {command.signature} {' ' * int(17 - len(command.name + command.signature))}:: " \
-               f"{command.brief}\n "
+               f"{command.brief}\n"
 
     async def send_bot_help(self, mapping):
-        e = discord.Embed(title='Command Help', colour=discord.Color.from_rgb(123, 47, 181))
-        e.set_author(name=self.context.author, icon_url=self.context.author.avatar_url)
+        e = discord.Embed(title='Command Help', 
+                          colour=discord.Color.from_rgb(123, 47, 181))
+        e.set_author(name=self.context.author, 
+                     icon_url=self.context.author.avatar_url)
 
         # Separate Page
         e_command = e.copy()
@@ -38,6 +40,13 @@ class HelpCommand(commands.HelpCommand):
                           '[Matt](https://github.com/mattco98)',
                     inline=True)
 
+        e.add_field(name='What is ChatTriggers?',
+                    value='ChatTriggers is a framework for Minecraft that allows for live scripting and client '
+                          'modification using JavaScript. We provide libraries, wrappers, objects and more to make '
+                          'your life as a modder as easy as possible. Even without the proper wrapper, you can still '
+                          'use exposed Minecraft methods and variables but you will need knowledge of FML mappings',
+                    inline=False)
+        
         # Iterate over Cogs & Command to add to the 2nd embed
         # Built for only one Cog
         for cog, _commands in self.get_bot_mapping().items():
@@ -54,13 +63,6 @@ class HelpCommand(commands.HelpCommand):
 
             if cog:
                 e_command.description = command_string
-
-        e.add_field(name='What is ChatTriggers?',
-                    value='ChatTriggers is a framework for Minecraft that allows for live scripting and client '
-                          'modification using JavaScript. We provide libraries, wrappers, objects and more to make '
-                          'your life as a modder as easy as possible. Even without the proper wrapper, you can still '
-                          'use exposed Minecraft methods and variables but you will need knowledge of FML mappings',
-                    inline=False)
 
         pages = menus.MenuPages(source=HelpPaginator([e, e_command]),
                                 clear_reactions_after=True)
