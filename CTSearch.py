@@ -33,13 +33,14 @@ class CTSearch(commands.Bot):
                         'com/chattriggers/ctjs/minecraft/mixins']
 
     async def on_ready(self):
-        self.MODULE_CHANNEL = await self.fetch_channel(366740283943157760)
         self.session = aiohttp.ClientSession()
 
         await self.change_presence(activity=discord.Activity(name="Reading JavaDocs | //help",
                                                              type=discord.ActivityType.playing))
         await self._prepare_cache()
-
+        await self.wait_until_ready()
+        
+        self.MODULE_CHANNEL = await self.fetch_channel(366740283943157760)
         self.load_extension('cogs.ChatTriggers')
 
         print('READY')
