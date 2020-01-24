@@ -15,7 +15,6 @@ class CTSearch(commands.Bot):
         self._cache = collections.defaultdict(list)
         self.session = None
         self.counter = 0
-        self.MODULE_CHANNEL = None
 
         self._latest_module = None
 
@@ -23,7 +22,8 @@ class CTSearch(commands.Bot):
         self._password = os.environ['PASSWORD']
 
         self.BASE = 'https://api.github.com/repos/ChatTriggers/ct.js/contents'
-
+        self.MODULE_CHANNEL = None
+        
         # This was found in the `build.gradle` of the repository
         self.IGNORED = ['com/chattriggers/ctjs/engine/langs', 'com/chattriggers/ctjs/engine/loader',
                         'com/chattriggers/ctjs/engine/module', 'com/chattriggers/ctjs/utils',
@@ -33,10 +33,10 @@ class CTSearch(commands.Bot):
                         'com/chattriggers/ctjs/minecraft/mixins']
 
     async def on_ready(self):
-        self.session = aiohttp.ClientSession()
         self.MODULE_CHANNEL = self.fetch_channel(366740283943157760)
+        self.session = aiohttp.ClientSession()
 
-        await self.change_presence(activity=discord.Activity(name="Reading JavaDocs | *help",
+        await self.change_presence(activity=discord.Activity(name="Reading JavaDocs | //help",
                                                              type=discord.ActivityType.playing))
         await self._prepare_cache()
 
@@ -100,4 +100,4 @@ class CTSearch(commands.Bot):
         return classes
 
 
-CTSearch(command_prefix="*").run(os.environ['TOKEN'])
+CTSearch(command_prefix="//").run(os.environ['TOKEN'])
