@@ -15,7 +15,8 @@ class ChatTriggers(commands.Cog):
         # self.check_for_new_module.start()
         
     def cog_unload(self):
-        self.check_for_new_module.cancel()
+        pass 
+        # self.check_for_new_module.cancel()
         
     @tasks.loop(minutes=15.0)
     async def check_for_new_module(self):
