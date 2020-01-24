@@ -17,7 +17,7 @@ class ChatTriggers(commands.Cog):
     def cog_unload(self):
         self.check_for_new_module.cancel()
         
-    @tasks.loop(minutes=15.0)
+    @tasks.loop(minutes=1.0)
     async def check_for_new_module(self):
         async with self.bot.session.get('https://chattriggers.com/api/modules',
                                         params={'sort': 'DATE_CREATED_DESC'}) as response:
@@ -28,7 +28,7 @@ class ChatTriggers(commands.Cog):
         # Check if `_latest_module` exists if not set it, but don't send it
         if not self.bot._latest_module:
             self.bot._latest_module = module
-            return 
+            # return 
 
         # If latest module is the same return
         if module == self.bot._latest_module:
