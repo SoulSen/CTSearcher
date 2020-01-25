@@ -12,7 +12,6 @@ class ModulePaginator(menus.ListPageSource):
     def build_embed(data, new_module: bool = False):
         # Easy building embeds everywhere
         e = discord.Embed(title=f'{"New Module Posted" if new_module else "Module"}: {data["name"]}',
-                          description=f'Owner: {data["owner"]["name"]}',
                           url=f'https://www.chattriggers.com/modules/v/{data["name"]}',
                           color=discord.Color.from_rgb(123, 47, 181))
 

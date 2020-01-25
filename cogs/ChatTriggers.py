@@ -50,7 +50,7 @@ class ChatTriggers(commands.Cog):
             # Prevent sending first module because it's probably not latest
             elif not self.bot._latest_module:
                 self.bot._latest_module = module
-                # return
+                return
 
             # A new module was posted
             # Build from `ModulePaginator`
