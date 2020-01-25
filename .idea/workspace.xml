@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6d434e02-d75a-4dd4-8a25-99d1d0116458" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CTSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/CTSearch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/ChatTriggers.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/ChatTriggers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/menus/HelpCommand.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/menus/HelpCommand.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/menus/HelpPaginator.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/menus/HelpPaginator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/menus/ModulePaginator.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/menus/ModulePaginator.py" afterDir="false" />
-    </list>
+    <list default="true" id="6d434e02-d75a-4dd4-8a25-99d1d0116458" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
