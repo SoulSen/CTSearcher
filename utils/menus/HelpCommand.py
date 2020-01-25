@@ -15,7 +15,7 @@ class HelpCommand(commands.HelpCommand):
                           color=discord.Color.from_rgb(123, 47, 181))
         e.set_author(name=self.context.author, 
                      icon_url=self.context.author.avatar_url)
-        e.set_footer(text=f'Current Prefix: {self.context.prefix}')
+        # e.set_footer(text=f'Current Prefix: {self.context.prefix}')
 
         # Separate Page
         e_command = e.copy()
@@ -67,5 +67,6 @@ class HelpCommand(commands.HelpCommand):
                 e_command.description = command_string
 
         pages = menus.MenuPages(source=HelpPaginator([e, e_command]),
-                                clear_reactions_after=True)
+                                clear_reactions_after=True,
+                                delete_message_after=True)
         await pages.start(self.context)

@@ -31,6 +31,9 @@ class ChatTriggers(commands.Cog):
             return await ctx.send(embed=discord.Embed(title=f'Missing `{error.param.name}` argument',
                                                       color=discord.Color.from_rgb(123, 47, 181)))
 
+        else:
+            print(error)
+
     def cog_unload(self):
         self.check_for_new_module.cancel()
         
@@ -128,14 +131,22 @@ class ChatTriggers(commands.Cog):
             info = await response.json()
 
         pages = menus.MenuPages(source=ModulePaginator(info['modules']),
-                                clear_reactions_after=True)
+                                clear_reactions_after=True,
+                                delete_message_after=True)
         await pages.start(ctx)
 
     @commands.command(brief='Get the source code of ChatTriggers',
                       help='Get the source code of ChatTriggers')
-    async def source(self, ctx, repo: str = ''):
-        e = discord.Embed(color=discord.Color.from_rgb(123, 47, 181))
+    async def source(self, ctx):
+        e = discord.Embed(title='Source Code',
+                          description='[ct.js Repository](https://github.com/ChatTriggers/ct.js)\n'
+                                      '[Rhino Repository](https://github.com/ChatTriggers/rhino)\n'
+                                      '[Backend Repository](https://github.com/ChatTriggers/website-backend)\n'
+                                      '[Frontend Repository](https://github.com/ChatTriggers/website-frontend)\n'
+                                      '[Bot Repository](https://github.com/SoulSen/CTSearcher)',
+                          color=discord.Color.from_rgb(123, 47, 181))
 
+        '''
         if repo == 'main':
             e.title = 'ct.js Repository'
             e.url = 'https://github.com/ChatTriggers/ct.js'
@@ -157,6 +168,7 @@ class ChatTriggers(commands.Cog):
         else:
             e.title = 'ChatTriggers User'
             e.url = 'https://github.com/ChatTriggers'
+        '''
 
         await ctx.send(embed=e)
 

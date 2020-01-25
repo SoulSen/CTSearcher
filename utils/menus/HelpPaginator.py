@@ -8,4 +8,6 @@ class HelpPaginator(menus.ListPageSource):
     async def format_page(self, menu, entries):
         # Just to make Pagination for the Help command easier
 
+        entries.set_footer(text=f'Current Page: {self.entries.index(entries) + 1}/{len(self.entries)}')
+
         return entries

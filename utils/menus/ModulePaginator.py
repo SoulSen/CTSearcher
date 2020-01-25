@@ -35,8 +35,11 @@ class ModulePaginator(menus.ListPageSource):
                 version_link = 'https://github.com/ChatTriggers/ct.js/releases/download/0.16.6/' \
                                'ctjs-0.16.6-SNAPSHOT-1.8.9.jar'
 
-            release_text += f'v{release["releaseVersion"]} for CT [v{release["modVersion"]}]' \
-                            f'({version_link})'
+            release_text += f'[v{release["releaseVersion"]}]' \
+                            f'(https://chattriggers.com/api/modules/{data["id"]}/releases/' \
+                            f'{release["id"]}?files=scripts) ' \
+                            f'for CT [v{release["modVersion"]}]' \
+                            f'({version_link})\n'
 
         e.add_field(name='Releases',
                     value='No releases' if not release_text else release_text,
@@ -47,7 +50,8 @@ class ModulePaginator(menus.ListPageSource):
                     inline=True)
 
         if len(data['description']) > 1024:
-            data['description'] = data['description'][:1024]
+            data['description'] = data['description'][:967] + f'\n[**...**]' \
+                                                              f'(https://www.chattriggers.com/modules/v/{data["name"]})'
 
         e.add_field(name='Description',
                     value=data['description'])
@@ -60,4 +64,6 @@ class ModulePaginator(menus.ListPageSource):
         # Organizes each module into an embed
 
         e = self.build_embed(entries, self.new_module)
+        e.set_footer(text=e._footer['text'] + f' | Current Page {self.entries.index(entries) + 1}/{len(self.entries)}')
+
         return e
