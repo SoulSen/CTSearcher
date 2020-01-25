@@ -12,63 +12,62 @@ class ChatTriggers(commands.Cog):
         bot.help_command = HelpCommand()
         bot.help_command.cog = self
         
-        # self.check_for_new_module.start()
-        
+        task = self.check_for_new_module.start()
+        task.add_done_callback(self.handle_task_exceptions)
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if hasattr(ctx.command, 'on_error'):
+            return
+
+        ignored = (commands.CommandNotFound,)
+
+        error = getattr(error, 'original', error)
+
+        if isinstance(error, ignored):
+            return
+
+        elif isinstance(error, commands.MissingRequiredArgument):
+            return await ctx.send(embed=discord.Embed(title=f'Missing `{error.param.name}` argument',
+                                                      color=discord.Color.from_rgb(123, 47, 181)))
+
     def cog_unload(self):
-        pass 
-        # self.check_for_new_module.cancel()
+        self.check_for_new_module.cancel()
         
-    @tasks.loop(minutes=15.0)
+    @tasks.loop(minutes=10.0)
     async def check_for_new_module(self):
-        async with self.bot.session.get('https://chattriggers.com/api/modules',
-                                        params={'sort': 'DATE_CREATED_DESC'}) as response:
-            module = await response.json()
+        try:
+            async with self.bot.session.get('https://chattriggers.com/api/modules',
+                                            params={'sort': 'DATE_CREATED_DESC'}) as response:
+                module = await response.json()
 
-        module = module['modules'][0]
+            module = module['modules'][0]
 
-        # Check if `_latest_module` exists if not set it, but don't send it
-        if not self.bot._latest_module:
-            self.bot._latest_module = module
-            return 
+            # Check if `_latest_module` exists and if it's the same module
+            if self.bot._latest_module and module == self.bot._latest_module:
+                return
 
-        # If latest module is the same return
-        if module == self.bot._latest_module:
-            return 
+            # Prevent sending first module because it's probably not latest
+            elif not self.bot._latest_module:
+                self.bot._latest_module = module
+                # return
 
-        # A new module was posted
-        # This embed was taken from `ModulePaginator`
+            # A new module was posted
+            # Build from `ModulePaginator`
+            e = ModulePaginator.build_embed(module, True)
+            
+            await self.bot.MODULE_CHANNEL.send(embed=e)
+        except Exception as e:
+            print(e.with_traceback(e.__traceback__))
 
-        e = discord.Embed(title=f'New Module Posted: {module["name"]}',
-                          description=f'Owner: {module["owner"]["name"]}',
-                          url=f'https://www.chattriggers.com/modules/v/{module["name"]}',
-                          color=discord.Color.from_rgb(123, 47, 181))
-
-        e.set_image(url=module['image'])
-
-        if len(module['description']) > 1024:
-            module['description'] = module['description'][:1024]
-
-        e.add_field(name='Description',
-                    value=module['description'])
-        e.add_field(name='Downloads',
-                    value=f'{module["downloads"]}')
-
-        release_text = ''
-
-        for release in module['releases']:
-            release_text += f'v{release["releaseVersion"]} for CT v{release["modVersion"]}'
-
-        e.add_field(name='Releases',
-                    value=release_text,
-                    inline=False)
-        e.set_footer(text=", ".join(module["tags"]))
-
-        await self.bot.MODULE_CHANNEL.send(embed=e)
+    def handle_task_exceptions(self, task):
+        if task.exception():
+            task.print_stack()
 
     @commands.command(aliases=['rtfm', 'rtfd', 'docs', 'search'],
-                      brief="Searches for an object from the JavaDocs",
-                      help="Searches through the available objects from ChatTriggers "
-                           "and returns links to the JavaDocs")
+                      brief='Searches for an object from the JavaDocs',
+                      help='Searches through the available objects from ChatTriggers '
+                           'and returns links to the JavaDocs')
     async def javadocs(self, ctx, query: str = None):
         e = discord.Embed(colour=discord.Color.blurple())
         e.set_author(name=f'Query made by: {ctx.author}',
@@ -79,9 +78,9 @@ class ChatTriggers(commands.Cog):
             return await ctx.send(embed=e)
 
         e.title = f'Results for: {query}'
-        results = 0
-        description = ''
         query = query.lower()
+        description = ''
+        results = 0
 
         for _class, _functions in self.bot._cache.items():
             # Check to prevent over 5 results
@@ -89,15 +88,13 @@ class ChatTriggers(commands.Cog):
                 break
 
             # Takes out the package class
-            _class_name = re.split(r'.*/', _class)[1].replace('.kt',
-                                                              '')
+            _class_name = re.split(r'.*/', _class)[1].replace('.kt', '')
 
             # Class result found
             if query in _class_name.lower():
                 results += 1
 
-                url = 'https://www.chattriggers.com/javadocs/' + _class.replace('.kt',
-                                                                                '.html')
+                url = 'https://www.chattriggers.com/javadocs/' + _class.replace('.kt', '.html')
                 description += f'[`{_class_name}`]({url})\n'
 
             for _function in _functions:
@@ -109,8 +106,7 @@ class ChatTriggers(commands.Cog):
                 if query in _function.lower():
                     results += 1
 
-                    url = 'https://www.chattriggers.com/javadocs/' + _class.replace('.kt',
-                                                                                    '.html') + \
+                    url = 'https://www.chattriggers.com/javadocs/' + _class.replace('.kt', '.html') + \
                           f'#{_function}'
                     _ = f'{_class_name}.{_function}()'
 
@@ -124,7 +120,8 @@ class ChatTriggers(commands.Cog):
             e.description = description
             await ctx.send(embed=e)
 
-    @commands.command()
+    @commands.command(brief='Search for modules',
+                      help='Search for modules posted from the ChatTriggers API')
     async def module(self, ctx, query: str):
         async with self.bot.session.get('https://chattriggers.com/api/modules',
                                         params={'q': query}) as response:
@@ -134,7 +131,8 @@ class ChatTriggers(commands.Cog):
                                 clear_reactions_after=True)
         await pages.start(ctx)
 
-    @commands.command()
+    @commands.command(brief='Get the source code of ChatTriggers',
+                      help='Get the source code of ChatTriggers')
     async def source(self, ctx, repo: str = ''):
         e = discord.Embed(color=discord.Color.from_rgb(123, 47, 181))
 
@@ -162,7 +160,8 @@ class ChatTriggers(commands.Cog):
 
         await ctx.send(embed=e)
 
-    @commands.command()
+    @commands.command(brief='Get the patreon link for ChatTriggers',
+                      help='Gives the user a patreon link to help benefit ChatTriggers')
     async def patreon(self, ctx):
         e = discord.Embed(title='Patreon', url='https://www.patreon.com/ChatTriggers',
                           description='Thanks for being interested in becoming a Patreon! '
@@ -172,7 +171,8 @@ class ChatTriggers(commands.Cog):
 
         await ctx.send(embed=e)
 
-    @commands.command()
+    @commands.command(brief='A migrating guide to the next major version',
+                      help='Help migrate to 1.0.0 and learn about its new features')
     async def migrating(self, ctx):
         e = discord.Embed(title='Migrating', url='https://github.com/ChatTriggers/ct.js/blob/master/MIGRATION.md',
                           description='Lots of changes are coming, ' 
@@ -184,10 +184,10 @@ class ChatTriggers(commands.Cog):
     @commands.command()
     async def crank(self, ctx):
         e = discord.Embed(title='CustomRank', url='https://www.chattriggers.com/modules/v/CustomRank',
-                          description="1. Are you using Labymod? If so, it's not supported.\n"
-                                      "2. Are you using a supported ChatTriggers version? "
-                                      "Versions allowed are `0.18.4` & `1.0.0`.\n"
-                                      "3. Are you on Minecraft Version `1.8.9`?"
+                          description='1. Are you using Labymod or Frames+? If so, they are not supported currently.\n'
+                                      '2. Are you using a supported ChatTriggers version? '
+                                      'Versions allowed are `0.18.4` & `1.0.0`.\n'
+                                      '3. Are you on Minecraft Version `1.8.9`?\n'
                                       '4. Did you use `/ct import CustomRank` **EXACTLY**\n'
                                       '5. Did you use `/crank` after importing CustomRank?\n',
                           color=discord.Color.from_rgb(123, 47, 181))

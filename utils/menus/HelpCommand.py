@@ -1,13 +1,14 @@
-from discord.ext import commands, menus
 from .HelpPaginator import HelpPaginator
+
+from discord.ext import commands, menus
 import discord
 
 
 class HelpCommand(commands.HelpCommand):
     # How commands should be viewed
     def get_command_signature(self, command):
-        return f"{command.name} {command.signature} {' ' * int(17 - len(command.name + command.signature))}:: " \
-               f"{command.brief}\n"
+        return f'{command.name} {command.signature} {" " * int(17 - len(command.name + command.signature))}:: ' \
+               f'{command.brief}\n'
 
     async def send_bot_help(self, mapping):
         e = discord.Embed(title='Command Help', 
@@ -26,13 +27,13 @@ class HelpCommand(commands.HelpCommand):
                           '.0-RC4-1.8.9.jar)\n '
                           '[0.18.4 Stable](https://github.com/ChatTriggers/ct.js/releases/download/0.18.4/ctjs-0.18.4'
                           '-SNAPSHOT-1.8.9.jar)\n '
-                          '[0.16.4 Legacy](https://github.com/ChatTriggers/ct.js/releases/download/0.16.6/ctjs-0.16.6'
+                          '[0.16.6 Legacy](https://github.com/ChatTriggers/ct.js/releases/download/0.16.6/ctjs-0.16.6'
                           '-SNAPSHOT-1.8.9.jar)')
 
         e.add_field(name='Download 1.12.2',
                     value='[0.18.4 Stable](https://github.com/ChatTriggers/ct.js/releases/download/0.18.4/ctjs-0.18.4'
                           '-SNAPSHOT-1.12.2.jar)\n '
-                          '[0.16.4 Legacy](https://github.com/ChatTriggers/ct.js/releases/download/0.16.6/ctjs-0.16.6'
+                          '[0.16.6 Legacy](https://github.com/ChatTriggers/ct.js/releases/download/0.16.6/ctjs-0.16.6'
                           '-SNAPSHOT-1.12.2.jar)')
 
         e.add_field(name='Developers',

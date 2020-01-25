@@ -3,9 +3,10 @@ import aiohttp
 import discord
 
 import collections
+import asyncio
 import base64
-import re
 import os
+import re
 
 
 class CTSearch(commands.Bot):
@@ -35,17 +36,19 @@ class CTSearch(commands.Bot):
     async def on_ready(self):
         self.session = aiohttp.ClientSession()
 
-        await self.change_presence(activity=discord.Activity(name="Reading JavaDocs | //help",
+        await self.change_presence(activity=discord.Activity(name='Reading JavaDocs | //help',
                                                              type=discord.ActivityType.playing))
         await self._prepare_cache()
+
         self.MODULE_CHANNEL = self.get_channel(366740283943157760)
-        
         self.load_extension('cogs.ChatTriggers')
 
         print('READY')
     
     async def on_message(self, message):
-        if message.channel.id == 435654238216126485 and message.content == 'bot' and message.author.id == 110613985954365440:
+        # Bring back the old `bot` `land`
+        if message.channel.id == 435654238216126485 and message.content == 'bot' \
+                and message.author.id == 110613985954365440:
             await message.channel.send('land')
             
         await self.process_commands(message)
@@ -73,6 +76,7 @@ class CTSearch(commands.Bot):
 
                 # We get the contents of the Kotlin file and extract the public functions
                 # with REGEX
+                await asyncio.sleep(0.5)
                 async with await self.session.get(f'{file_or_dir["url"]}',
                                                   auth=aiohttp.BasicAuth(self._username,
                                                                          self._password)
@@ -97,6 +101,7 @@ class CTSearch(commands.Bot):
             # the directory and extract its files
             elif file_or_dir['type'] == 'dir':
                 if not any(pkg in file_or_dir['path'] for pkg in self.IGNORED):
+                    await asyncio.sleep(0.5)
                     async with await self.session.get(f'{self.BASE}/{file_or_dir["path"]}',
                                                       auth=aiohttp.BasicAuth(self._username,
                                                                              self._password)
@@ -106,4 +111,4 @@ class CTSearch(commands.Bot):
         return classes
 
 
-CTSearch(command_prefix="//").run(os.environ['TOKEN'])
+CTSearch(command_prefix='//').run(os.environ['TOKEN'])

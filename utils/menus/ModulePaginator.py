@@ -3,35 +3,62 @@ import discord
 
 
 class ModulePaginator(menus.ListPageSource):
-    def __init__(self, data):
+    def __init__(self, data, new_module: bool = False):
+        self.new_module = new_module
+
         super().__init__(data, per_page=1)
+
+    @staticmethod
+    def build_embed(data, new_module: bool = False):
+        # Easy building embeds everywhere
+        e = discord.Embed(title=f'{"New Module Posted" if new_module else "Module"}: {data["name"]}',
+                          description=f'Owner: {data["owner"]["name"]}',
+                          url=f'https://www.chattriggers.com/modules/v/{data["name"]}',
+                          color=discord.Color.from_rgb(123, 47, 181))
+
+        e.set_image(url='' if not data['image'] else data['image'])
+
+        e.add_field(name='Owner',
+                    value=data['owner']['name'])
+
+        release_text = ''
+
+        for release in data['releases']:
+            version_link = 'https://github.com/ChatTriggers/ct.js/releases'
+
+            if release['modVersion'] == '1.0.0':
+                version_link = 'https://github.com/ChatTriggers/ct.js/releases/download/1.0.0RC4/' \
+                               'ctjs-1.0.0-RC4-1.8.9.jar'
+            elif release['modVersion'] == '0.18.4':
+                version_link = 'https://github.com/ChatTriggers/ct.js/releases/download/0.18.4/' \
+                               'ctjs-0.18.4-SNAPSHOT-1.8.9.jar'
+            elif release['modVersion'] == '0.16.6':
+                version_link = 'https://github.com/ChatTriggers/ct.js/releases/download/0.16.6/' \
+                               'ctjs-0.16.6-SNAPSHOT-1.8.9.jar'
+
+            release_text += f'v{release["releaseVersion"]} for CT [v{release["modVersion"]}]' \
+                            f'({version_link})'
+
+        e.add_field(name='Releases',
+                    value='No releases' if not release_text else release_text,
+                    inline=True)
+
+        e.add_field(name='Downloads',
+                    value=f'{data["downloads"]}',
+                    inline=True)
+
+        if len(data['description']) > 1024:
+            data['description'] = data['description'][:1024]
+
+        e.add_field(name='Description',
+                    value=data['description'])
+
+        e.set_footer(text=', '.join(data['tags']))
+
+        return e
 
     async def format_page(self, menu, entries):
         # Organizes each module into an embed
 
-        e = discord.Embed(title=f'Module: {entries["name"]}',
-                          description=f'Owner: {entries["owner"]["name"]}',
-                          url=f'https://www.chattriggers.com/modules/v/{entries["name"]}',
-                          color=discord.Color.from_rgb(123, 47, 181))
-
-        e.set_image(url=entries['image'])
-
-        if len(entries['description']) > 1024:
-            entries['description'] = entries['description'][:1024]
-
-        e.add_field(name='Description',
-                    value=entries['description'])
-        e.add_field(name='Downloads',
-                    value=f'{entries["downloads"]}')
-
-        release_text = ''
-
-        for release in entries['releases']:
-            release_text += f'v{release["releaseVersion"]} for CT v{release["modVersion"]}'
-
-        e.add_field(name='Releases',
-                    value=release_text,
-                    inline=False)
-        e.set_footer(text=", ".join(entries["tags"]))
-
+        e = self.build_embed(entries, self.new_module)
         return e
