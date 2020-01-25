@@ -193,7 +193,9 @@ class ChatTriggers(commands.Cog):
 
         await ctx.send(embed=e)
 
-    @commands.command()
+    @commands.command(aliases=['customrank'],
+                      brief='Gives information to loosers about CustomRank',
+                      help='Information on solutions and installation for CustomRank')
     async def crank(self, ctx):
         e = discord.Embed(title='CustomRank', url='https://www.chattriggers.com/modules/v/CustomRank',
                           description='1. Are you using Labymod or Frames+? If so, they are not supported currently.\n'
