@@ -1,5 +1,6 @@
 from discord.ext import menus
 import discord
+import re
 
 
 class ModulePaginator(menus.ListPageSource):
@@ -50,11 +51,16 @@ class ModulePaginator(menus.ListPageSource):
                     inline=True)
 
         if len(data['description']) > 1024:
-            data['description'] = data['description'][:967] + f'\n[**...**]' \
+            data['description'] = data['description'][:950] + f'\n[**...**]' \
                                                               f'(https://www.chattriggers.com/modules/v/{data["name"]})'
 
+        sanitize = re.sub(r"\|\|([\S\s]*)\|\|", '\\1', data['description'])
+
         e.add_field(name='Description',
-                    value=data['description'])
+                    value=sanitize)
+
+        if not data['tags']:
+            data['tags'].append('None')
 
         e.set_footer(text=', '.join(data['tags']))
 

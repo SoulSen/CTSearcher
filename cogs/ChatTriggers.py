@@ -102,6 +102,11 @@ class ChatTriggers(commands.Cog):
 
             for _function in _functions:
                 # Checks don't occur in the outer for-loop so we have to check in here too
+                # print(_function)
+                modded_params = _function[2]
+                unmodded_params = _function[1]
+                _function = _function[0]
+
                 if results > 5:
                     break
 
@@ -110,8 +115,12 @@ class ChatTriggers(commands.Cog):
                     results += 1
 
                     url = 'https://www.chattriggers.com/javadocs/' + _class.replace('.kt', '.html') + \
-                          f'#{_function}'
-                    _ = f'{_class_name}.{_function}()'
+                          f'#{_function}-'
+                    _ = f'{_class_name}.{_function}{unmodded_params}'
+
+                    for params in modded_params.split(','):
+                        param_name = params.replace(' ', '').split(':')[0]
+                        url += f'{param_name}-'
 
                     description += f'[`{_}`]({url})\n'
 
@@ -141,34 +150,11 @@ class ChatTriggers(commands.Cog):
         e = discord.Embed(title='Source Code',
                           description='[ct.js Repository](https://github.com/ChatTriggers/ct.js)\n'
                                       '[Rhino Repository](https://github.com/ChatTriggers/rhino)\n'
+                                      '[Mamba Repository](https://github.com/ChatTriggers/Mamba)\n'
                                       '[Backend Repository](https://github.com/ChatTriggers/website-backend)\n'
                                       '[Frontend Repository](https://github.com/ChatTriggers/website-frontend)\n'
                                       '[Bot Repository](https://github.com/SoulSen/CTSearcher)',
                           color=discord.Color.from_rgb(123, 47, 181))
-
-        '''
-        if repo == 'main':
-            e.title = 'ct.js Repository'
-            e.url = 'https://github.com/ChatTriggers/ct.js'
-        elif repo.lower() == 'rhino':
-            e.title = 'ct.js Rhino Repository'
-            e.url = 'https://github.com/ChatTriggers/rhino'
-        elif repo.lower() == 'backend':
-            e.title = 'Website Backend Repository'
-            e.url = 'https://github.com/ChatTriggers/website-backend'
-        elif repo.lower() == 'frontend':
-            e.title = 'Website Frontend Repository'
-            e.url = 'https://github.com/ChatTriggers/website-frontend'
-        elif repo.lower() == 'mamba':
-            e.title = 'ct.js Mamba Repository'
-            e.url = 'https://github.com/ChatTriggers/Mamba'
-        elif repo.lower() == 'bot':
-            e.title = 'ChatTriggers Bot Repository'
-            e.url = 'https://github.com/SoulSen/CTSearcher'
-        else:
-            e.title = 'ChatTriggers User'
-            e.url = 'https://github.com/ChatTriggers'
-        '''
 
         await ctx.send(embed=e)
 
