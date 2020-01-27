@@ -37,7 +37,7 @@ class ChatTriggers(commands.Cog):
     def cog_unload(self):
         self.check_for_new_module.cancel()
         
-    @tasks.loop(minutes=10.0)
+    @tasks.loop(seconds=15.0)
     async def check_for_new_module(self):
         try:
             async with self.bot.session.get('https://chattriggers.com/api/modules',
