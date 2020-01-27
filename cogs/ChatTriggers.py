@@ -48,10 +48,12 @@ class ChatTriggers(commands.Cog):
 
             # Check if `_latest_module` exists and if it's the same module
             if self.bot._latest_module and module == self.bot._latest_module:
+                print('same module?')
                 return
 
             # Prevent sending first module because it's probably not latest
             elif not self.bot._latest_module:
+                print('first module')
                 self.bot._latest_module = module
                 return
 
