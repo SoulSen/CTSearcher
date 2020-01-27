@@ -40,7 +40,7 @@ class CTSearch(commands.Bot):
                                                              type=discord.ActivityType.playing))
         await self._prepare_cache()
 
-        self.MODULE_CHANNEL = self.get_channel(366740283943157760)
+        self.MODULE_CHANNEL = self.get_channel(671183508282277899)
         self.load_extension('cogs.ChatTriggers')
 
         print('READY')
