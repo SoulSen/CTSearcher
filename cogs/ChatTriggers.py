@@ -12,8 +12,8 @@ class ChatTriggers(commands.Cog):
         bot.help_command = HelpCommand()
         bot.help_command.cog = self
         
-        task = self.check_for_new_module.start()
-        task.add_done_callback(self.handle_task_exceptions)
+        # task = self.check_for_new_module.start()
+        # task.add_done_callback(self.handle_task_exceptions)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -35,7 +35,8 @@ class ChatTriggers(commands.Cog):
             print(error)
 
     def cog_unload(self):
-        self.check_for_new_module.cancel()
+        pass 
+        # self.check_for_new_module.cancel()
         
     @tasks.loop(seconds=15.0)
     async def check_for_new_module(self):
