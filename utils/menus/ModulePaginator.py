@@ -51,10 +51,10 @@ class ModulePaginator(menus.ListPageSource):
                     inline=True)
 
         if len(data['description']) > 1024:
-            data['description'] = data['description'][:950] + f'\n[**...**]' \
-                                                              f'(https://www.chattriggers.com/modules/v/{data["name"]})'
+            data['description'] = f'{data["description"][:950]}\n[**...**]' \
+                                  f'(https://www.chattriggers.com/modules/v/{data["name"]})'
 
-        sanitize = re.sub(r"\|\|([\S\s]*)\|\|", '\\1', data['description'])
+        sanitize = re.sub(r'\|\|([\S\s]*)\|\|', '\\1', data['description'])
 
         e.add_field(name='Description',
                     value=sanitize)
@@ -70,6 +70,6 @@ class ModulePaginator(menus.ListPageSource):
         # Organizes each module into an embed
 
         e = self.build_embed(entries, self.new_module)
-        e.set_footer(text=e._footer['text'] + f' | Current Page {self.entries.index(entries) + 1}/{len(self.entries)}')
+        e.set_footer(text=f'{e._footer["text"]} | Current Page {self.entries.index(entries) + 1}/{len(self.entries)}')
 
         return e

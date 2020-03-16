@@ -1,12 +1,14 @@
 from utils.menus import ModulePaginator, HelpCommand
+from utils.fuzzy import finder
+from utils.types import KotlinMethod, KotlinClass, MCObfuscatedField, MCObfuscatedMethod, MCObfuscatedClass
 
 from discord.ext import commands, menus, tasks
 import discord
-import re
 
 
 class ChatTriggers(commands.Cog):
     def __init__(self, bot):
+        self.auto_update = True
         self.bot = bot
 
         bot.help_command = HelpCommand()
@@ -32,7 +34,7 @@ class ChatTriggers(commands.Cog):
                                                       color=discord.Color.from_rgb(123, 47, 181)))
 
         else:
-            print(error)
+            raise error
 
     def cog_unload(self):
         pass 
@@ -40,13 +42,14 @@ class ChatTriggers(commands.Cog):
         
     @tasks.loop(seconds=15.0)
     async def check_for_new_module(self):
-        try:
-            async with self.bot.session.get('https://chattriggers.com/api/modules',
-                                            params={'sort': 'DATE_CREATED_DESC'}) as response:
-                module = await response.json()
+        if not self.auto_update:
+            return
 
-            module = module['modules'][0]
+        async with self.bot.session.get('https://chattriggers.com/api/modules',
+                                        params={'sort': 'DATE_CREATED_DESC'}) as response:
+            module = await response.json()
 
+<<<<<<< HEAD
             # Check if `_latest_module` exists and if it's the same module
             if self.bot._latest_module and module == self.bot._latest_module:
                 print('same module?')
@@ -57,14 +60,24 @@ class ChatTriggers(commands.Cog):
                 print('first module')
                 self.bot._latest_module = module
                 return
+=======
+        module = module['modules'][0]
 
-            # A new module was posted
-            # Build from `ModulePaginator`
-            e = ModulePaginator.build_embed(module, True)
+        # Check if `_latest_module` exists and if it's the same module
+        if self.bot._latest_module and module == self.bot._latest_module:
+            return
+>>>>>>> stuff
+
+        # Prevent sending first module because it's probably not latest
+        elif not self.bot._latest_module:
+            self.bot._latest_module = module
+            return
+
+        # A new module was posted
+        # Build from `ModulePaginator`
+        e = ModulePaginator.build_embed(module, True)
             
-            await self.bot.MODULE_CHANNEL.send(embed=e)
-        except Exception as e:
-            print(e.with_traceback(e.__traceback__))
+        await self.bot.MODULE_CHANNEL.send(embed=e)
 
     def handle_task_exceptions(self, task):
         if task.exception():
@@ -83,57 +96,72 @@ class ChatTriggers(commands.Cog):
             e.description = '[JavaDocs](https://www.chattriggers.com/javadocs/)'
             return await ctx.send(embed=e)
 
-        e.title = f'Results for: {query}'
-        query = query.lower()
-        description = ''
-        results = 0
+        e.title = f'Results for: `{query}`'
+        e.description = ''
 
-        for _class, _functions in self.bot._cache.items():
-            # Check to prevent over 5 results
-            if results > 5:
+        for kotlin_class in self.bot._cache:
+            print([kotlin_class] + [method for method in kotlin_class.methods])
+            results = finder(query, [kotlin_class] + [method for method in kotlin_class.methods])
+
+            for obj in results:
+                if isinstance(obj, KotlinClass):
+                    e.description += f'[`{obj.clean_name}`]({obj.url})\n'
+
+                elif isinstance(obj, KotlinMethod):
+                    e.description += f'[`{obj.kotlin_class.clean_name}.{obj.name}{obj.parameters}`]({obj.url})\n'
+
+        if not e.description:
+            e.description = 'None Found!'
+
+        await ctx.send(embed=e)
+
+    @commands.command()
+    async def mappings(self, ctx, query: str):
+        e = discord.Embed(colour=discord.Color.blurple())
+        e.set_author(name=f'Query made by: {ctx.author}',
+                     icon_url=ctx.author.avatar_url)
+
+        if not query:
+            e.description = '[JavaDocs](https://www.chattriggers.com/javadocs/)'
+            return await ctx.send(embed=e)
+
+        e.title = f'Results for: `{query}`'
+        e.description = ''
+        counter = 0
+
+        for mc_class in self.bot.mapping_viewer.mappings:
+            results = finder(query, [mc_class] + [method for method in mc_class.methods] +
+                             [method for method in mc_class.fields])
+
+            if counter > 5:
                 break
 
-            # Takes out the package class
-            _class_name = re.split(r'.*/', _class)[1].replace('.kt', '')
-
-            # Class result found
-            if query in _class_name.lower():
-                results += 1
-
-                url = 'https://www.chattriggers.com/javadocs/' + _class.replace('.kt', '.html')
-                description += f'[`{_class_name}`]({url})\n'
-
-            for _function in _functions:
-                # Checks don't occur in the outer for-loop so we have to check in here too
-                # print(_function)
-                modded_params = _function[2]
-                unmodded_params = _function[1]
-                _function = _function[0]
-
-                if results > 5:
+            for obj in results:
+                if counter > 5:
                     break
 
-                # Function result found
-                if query in _function.lower():
-                    results += 1
+                if isinstance(obj, MCObfuscatedClass):
+                    e.description += f'`{obj.package.replace("/", ".")}{obj.name}`\n'
+                    counter += 1
 
-                    url = 'https://www.chattriggers.com/javadocs/' + _class.replace('.kt', '.html') + \
-                          f'#{_function}-'
-                    _ = f'{_class_name}.{_function}{unmodded_params}'
+                elif isinstance(obj, MCObfuscatedMethod):
+                    e.description += f'`{obj.mc_class.package.replace("/", ".")}' \
+                                     f'{obj.mc_class.name}.{obj.obfuscated_name}() | ' \
+                                     f'{obj.mc_class.package.replace("/", ".")}' \
+                                     f'{obj.mc_class.name}.{obj.deobfuscated_name}()`\n'
+                    counter += 1
 
-                    for params in modded_params.split(','):
-                        param_name = params.replace(' ', '').split(':')[0]
-                        url += f'{param_name}-'
+                elif isinstance(obj, MCObfuscatedField):
+                    e.description += f'`{obj.mc_class.package.replace("/", ".")}' \
+                                     f'{obj.mc_class.name}.{obj.obfuscated_name} | ' \
+                                     f'{obj.mc_class.package.replace("/", ".")}' \
+                                     f'{obj.mc_class.name}.{obj.deobfuscated_name}`\n'
+                    counter += 1
 
-                    description += f'[`{_}`]({url})\n'
+        if not e.description:
+            e.description = 'None Found!'
 
-        if results == 0:
-            e.description = 'No Results!'
-            await ctx.send(embed=e)
-
-        else:
-            e.description = description
-            await ctx.send(embed=e)
+        await ctx.send(embed=e)
 
     @commands.command(brief='Search for modules',
                       help='Search for modules posted from the ChatTriggers API')
@@ -194,6 +222,21 @@ class ChatTriggers(commands.Cog):
                                       '4. Did you use `/ct import CustomRank` **EXACTLY**\n'
                                       '5. Did you use `/crank` after importing CustomRank?\n',
                           color=discord.Color.from_rgb(123, 47, 181))
+
+        await ctx.send(embed=e)
+
+    @commands.command()
+    @commands.has_role(436707819752783872)
+    @commands.is_owner()
+    async def autoupdate(self, ctx):
+        e = discord.Embed(color=discord.Color.from_rgb(123, 47, 181))
+
+        if self.auto_update:
+            self.auto_update = False
+            e.title = 'Auto posting for modules has been disabled'
+        else:
+            self.auto_update = True
+            e.title = 'Auto posting for modules has been enabled'
 
         await ctx.send(embed=e)
 

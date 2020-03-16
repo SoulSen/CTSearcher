@@ -2,7 +2,9 @@ from discord.ext import commands
 import aiohttp
 import discord
 
-import collections
+from utils.types import KotlinMethod, KotlinClass
+from utils.mappings import MappingViewer
+
 import asyncio
 import base64
 import os
@@ -13,14 +15,16 @@ class CTSearch(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self._cache = collections.defaultdict(list)
+        self._cache = []
+        self.mapping_viewer = MappingViewer()
+
         self.session = None
         self.counter = 0
 
         self._latest_module = None
 
-        self._username = os.environ['USERNAME']
-        self._password = os.environ['PASSWORD']
+        self._username = 'SoulSen'
+        self._password = 'affe0efaacd67e66ae05cde141891ac4ed39763b'
 
         self.BASE = 'https://api.github.com/repos/ChatTriggers/ct.js/contents'
         self.MODULE_CHANNEL = None
@@ -35,10 +39,13 @@ class CTSearch(commands.Bot):
 
     async def on_ready(self):
         self.session = aiohttp.ClientSession()
-
+        
         await self.change_presence(activity=discord.Activity(name='Reading JavaDocs | //help',
                                                              type=discord.ActivityType.playing))
         await self._prepare_cache()
+
+        await self.mapping_viewer.setup_mappings('./utils/mappings/fields_map.csv', 'fields')
+        await self.mapping_viewer.setup_mappings('./utils/mappings/methods_map.csv', 'methods')
 
         self.MODULE_CHANNEL = self.get_channel(366740283943157760)
         self.load_extension('cogs.ChatTriggers')
@@ -64,7 +71,7 @@ class CTSearch(commands.Bot):
     async def _create_cache(self, initial, classes=None):
         if classes is None:
             # This is recycled because it's used to keep track of all the classes
-            classes = collections.defaultdict(list)
+            classes = []
 
         for file_or_dir in initial:
             # Check if item is a file which should be a Kotlin class
@@ -89,10 +96,13 @@ class CTSearch(commands.Bot):
                 # matches = re.findall(r'(.*)fun\s(.*?)\(', content)
                 matches = re.findall(r'(.*)fun\s(.*?)(\((.*)\))(?=[\s{:=])', content)
 
-                for func_type, func_name, unmodded_params, modded_params in matches:
-                    if 'private' or 'internal' not in func_type.lower():
-                        classes[file].append((func_name, unmodded_params, modded_params))
+                _class = KotlinClass(file)
 
+                for func_type, func_name, params, clean_params in matches:
+                    if 'private' or 'internal' not in func_type.lower():
+                        _class.add_method(KotlinMethod(_class, func_name, params, clean_params))
+
+                classes.append(_class)
                 self.counter += 1
 
                 # This print is needed in order to identify if something is stuck
@@ -112,4 +122,4 @@ class CTSearch(commands.Bot):
         return classes
 
 
-CTSearch(command_prefix='//').run(os.environ['TOKEN'])
+CTSearch(command_prefix='//').run('NTUxMjA2MTI1MDYwNzUxMzYw.XiyPZw.i-vqOUZiSBk0ZX3U6HoO_cL_4P0')
