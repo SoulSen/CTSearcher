@@ -122,4 +122,4 @@ class CTSearch(commands.Bot):
         return classes
 
 
-CTSearch(command_prefix='//').run('NTUxMjA2MTI1MDYwNzUxMzYw.XiyPZw.i-vqOUZiSBk0ZX3U6HoO_cL_4P0')
+CTSearch(command_prefix='//').run('no token for u')
